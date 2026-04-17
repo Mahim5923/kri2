@@ -9,6 +9,7 @@ load_dotenv()
 # IMPORT ROUTES AFTER ENV IS LOADED
 from routes.ats import ats_bp
 from routes.question import question_bp
+from routes.evaluate import evaluate_bp
 
 app = Flask(__name__)
 # Explicit CORS for local development
@@ -17,6 +18,7 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 # Register Blueprints
 app.register_blueprint(ats_bp, url_prefix='/api')
 app.register_blueprint(question_bp, url_prefix='/api')
+app.register_blueprint(evaluate_bp, url_prefix='/api')
 
 # ADD THIS LINE TO TEST MANUALLY
 @app.route('/test')

@@ -37,37 +37,27 @@ def analyze_resume():
             f"Target Level: {difficulty}\n"
             f"Resume Content: {resume_text[:3000]}\n\n"
             "Task: Evaluate this resume against industry standards for the role and level above.\n"
-            "Provide a response in exactly this format:\n"
-            "SCORE: [Provide a number from 0-100 based on role fit]\n"
-            "SUMMARY: [A 2-sentence summary of strengths/weaknesses for the interviewer]\n"
-            "IMPROVEMENTS: [3 bullet points of specific technical/professional things missing from this resume]"
+            "Provide a response strictly in JSON format with exactly these keys:\n"
+            '{"match_score": <number 0-100>, "candidate_summary": "<2-sentence summary>", "resume_feedback": "<3 bullet points of missing skills>"}'
         )
         
         response = client.chat.completions.create(
-            messages=[{"role": "user", "content": analysis_prompt}],
+            messages=[
+                {"role": "system", "content": "You are an expert HR Applicant Tracking System. You must always reply with valid JSON."},
+                {"role": "user", "content": analysis_prompt}
+            ],
             model="llama-3.3-70b-versatile",
-            temperature=0.5 # Lower temperature for more consistent scoring
+            response_format={"type": "json_object"},
+            temperature=0.2
         )
         
-        raw_output = response.choices[0].message.content
-
-        # Robust Parsing
-        score = 0
-        summary = "No summary generated."
-        improvements = "No specific improvements found."
-
-        try:
-            score = raw_output.split("SUMMARY:")[0].replace("SCORE:", "").strip()
-            summary = raw_output.split("SUMMARY:")[1].split("IMPROVEMENTS:")[0].strip()
-            improvements = raw_output.split("IMPROVEMENTS:")[1].strip()
-        except:
-            # Fallback if AI messes up the format
-            summary = raw_output
+        import json
+        result = json.loads(response.choices[0].message.content)
 
         return jsonify({
-            "match_score": score,
-            "candidate_summary": summary,
-            "resume_feedback": improvements,
+            "match_score": result.get("match_score", 0),
+            "candidate_summary": result.get("candidate_summary", "No summary generated."),
+            "resume_feedback": result.get("resume_feedback", "No improvements found."),
             "status": "Success"
         })
 
