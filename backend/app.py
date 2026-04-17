@@ -5,12 +5,12 @@ from flask_cors import CORS
 from groq import Groq
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+load_dotenv(os.path.join(os.path.dirname(__file__), "venv", ".env"))
 
 app = Flask(__name__)
 CORS(app)
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY", "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")) # fallback to key from aiinterview
+client = Groq(api_key=os.getenv("GROQ_API_KEY")) # fallback to key from aiinterview
 
 @app.route("/api/analyze-resume", methods=["POST"])
 def analyze_resume():
