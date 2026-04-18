@@ -261,7 +261,7 @@ const InterviewRoom = () => {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
         <div className="glass-panel" style={{ maxWidth: '700px', width: '100%', padding: '50px', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '16px' }}>💬</div>
+
           <h2 style={{ color: 'var(--accent-cyan)', marginBottom: '8px' }}>Answer Received!</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Question {currentStep - 1} of {totalQuestions}</p>
 
@@ -272,7 +272,7 @@ const InterviewRoom = () => {
             </div>
           ) : (
             <div style={{ padding: '30px', color: 'var(--text-secondary)', marginBottom: '36px' }}>
-              {isFetchingNext ? '⏳ Preparing next question...' : 'Moving to next question...'}
+              {isFetchingNext ? 'Preparing next question...' : 'Moving to next question...'}
             </div>
           )}
 
@@ -283,7 +283,7 @@ const InterviewRoom = () => {
               disabled={isFetchingNext}
               style={{ padding: '16px 40px', fontSize: '1rem' }}
             >
-              {isFetchingNext ? '⏳ Loading next question...' : `▶ Next Question (${currentStep} of ${totalQuestions})`}
+              {isFetchingNext ? 'Loading next question...' : `Next Question (${currentStep} of ${totalQuestions})`}
             </button>
             <button
               onClick={() => finishInterview()}
@@ -309,14 +309,14 @@ const InterviewRoom = () => {
 
         {isEvaluating && (
           <div className="glass-panel" style={{ padding: '30px', textAlign: 'center', marginBottom: '30px' }}>
-            <p style={{ color: 'var(--accent-cyan)', fontSize: '1.1rem' }}>⏳ AI is scoring your performance...</p>
+            <p style={{ color: 'var(--accent-cyan)', fontSize: '1.1rem' }}>AI is scoring your performance...</p>
           </div>
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginBottom: '30px' }}>
           {/* Video Playback */}
           <div className="glass-panel" style={{ padding: '16px' }}>
-            <h3 style={{ margin: '0 0 12px', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>📹 Interview Recording</h3>
+            <h3 style={{ margin: '0 0 12px', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Interview Recording</h3>
             {recordingUrl ? (
               <video ref={playbackRef} src={recordingUrl} controls style={{ width: '100%', borderRadius: '12px', background: '#000' }} />
             ) : (
@@ -326,10 +326,10 @@ const InterviewRoom = () => {
 
           {/* Timestamped Analytics */}
           <div className="glass-panel" style={{ padding: '24px', overflowY: 'auto', maxHeight: '420px' }}>
-            <h3 style={{ margin: '0 0 16px', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>⏱ Analytics Timeline</h3>
+            <h3 style={{ margin: '0 0 16px', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Analytics Timeline</h3>
 
             {fillerEvents.length === 0 ? (
-              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>✅ No filler words detected!</p>
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>No filler words detected.</p>
             ) : (
               <>
                 <p style={{ color: 'var(--accent-red)', fontSize: '0.9rem', marginBottom: '12px' }}>
@@ -368,7 +368,7 @@ const InterviewRoom = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '30px' }}>
           {/* Eye Contact */}
           <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>👁️</div>
+
             <h4 style={{ margin: '0 0 4px', color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase' }}>Eye Contact</h4>
             <div style={{ fontSize: '2.5rem', fontWeight: '800', color: eyeStats.eyeContactPercent >= 60 ? '#00ff88' : '#ffd700' }}>
               {eyeStats.eyeContactPercent}%
@@ -380,7 +380,7 @@ const InterviewRoom = () => {
 
           {/* Filler Words */}
           <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🎙️</div>
+
             <h4 style={{ margin: '0 0 4px', color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase' }}>Filler Words</h4>
             <div style={{ fontSize: '2.5rem', fontWeight: '800', color: totalFillers <= 3 ? '#00ff88' : totalFillers <= 8 ? '#ffd700' : '#ff4b2b' }}>
               {totalFillers}
@@ -392,7 +392,7 @@ const InterviewRoom = () => {
 
           {/* Interview Score */}
           <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🏆</div>
+
             <h4 style={{ margin: '0 0 4px', color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase' }}>Interview Score</h4>
             <div style={{ fontSize: '2.5rem', fontWeight: '800', color: 'var(--accent-cyan)' }}>
               {isEvaluating ? '...' : `${evalData?.final_score ?? '--'}%`}
@@ -404,17 +404,17 @@ const InterviewRoom = () => {
         {/* Strengths + Weaknesses */}
         {evalData && (
           <div className="glass-panel" style={{ padding: '30px', marginBottom: '30px' }}>
-            <h3 style={{ margin: '0 0 20px' }}>📝 Performance Breakdown</h3>
+            <h3 style={{ margin: '0 0 20px' }}>Performance Breakdown</h3>
             <p style={{ lineHeight: '1.7', color: 'var(--text-secondary)', marginBottom: '24px' }}>{evalData.feedback_summary}</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
               <div>
-                <h4 style={{ color: '#00ff88', marginBottom: '12px' }}>✅ Strengths</h4>
+                <h4 style={{ color: '#00ff88', marginBottom: '12px' }}>Strengths</h4>
                 <ul style={{ paddingLeft: '20px', margin: 0 }}>
                   {evalData.strengths?.map((s, i) => <li key={i} style={{ marginBottom: '8px', lineHeight: '1.5' }}>{s}</li>)}
                 </ul>
               </div>
               <div>
-                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>📈 Improve</h4>
+                <h4 style={{ color: 'var(--accent-red)', marginBottom: '12px' }}>Areas to Improve</h4>
                 <ul style={{ paddingLeft: '20px', margin: 0 }}>
                   {evalData.weaknesses?.map((w, i) => <li key={i} style={{ marginBottom: '8px', lineHeight: '1.5' }}>{w}</li>)}
                 </ul>
@@ -425,7 +425,7 @@ const InterviewRoom = () => {
 
         {/* Q&A Transcript */}
         <div className="glass-panel" style={{ padding: '30px', marginBottom: '30px' }}>
-          <h3 style={{ margin: '0 0 20px' }}>📋 Full Q&A Transcript</h3>
+          <h3 style={{ margin: '0 0 20px' }}>Full Q&A Transcript</h3>
           {qnaList.map((qa, i) => (
             <div key={i} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: i < qnaList.length - 1 ? '1px solid var(--glass-border)' : 'none' }}>
               <p style={{ color: 'var(--accent-cyan)', fontWeight: '600', marginBottom: '6px' }}>Q{i + 1}: {qa.question}</p>
@@ -460,7 +460,7 @@ const InterviewRoom = () => {
             </span>
             &nbsp;·&nbsp;
             <span style={{ color: eyeContactPercent >= 60 ? '#00ff88' : '#ffd700' }}>
-              👁 {eyeContactPercent}% eye contact
+              {eyeContactPercent}% eye contact
             </span>
           </p>
         </div>
@@ -494,7 +494,7 @@ const InterviewRoom = () => {
               background: 'rgba(255,75,43,0.92)', padding: '8px 18px',
               borderRadius: '20px', fontWeight: '600', fontSize: '0.9rem'
             }}>
-              🎤 Recording...
+              Recording...
             </div>
           )}
           {/* Live filler counter */}
@@ -552,7 +552,7 @@ const InterviewRoom = () => {
               style={{ flex: 1, padding: '18px', fontSize: '1rem' }}
               disabled={isFetchingNext}
             >
-              {isListening ? '⏹ Stop Recording' : '🎙 Start Answering'}
+              {isListening ? 'Stop Recording' : 'Start Answering'}
             </button>
             {isListening && (
               <button
@@ -563,7 +563,7 @@ const InterviewRoom = () => {
                   color: '#000', fontWeight: '700', cursor: 'pointer'
                 }}
               >
-                ✅ Submit Answer
+                Submit Answer
               </button>
             )}
           </div>

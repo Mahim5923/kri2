@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const SetupScreen = () => {
   const [file, setFile] = useState(null);
@@ -8,7 +8,31 @@ const SetupScreen = () => {
   const [difficulty, setDifficulty] = useState('Intermediate');
   const [qCount, setQCount] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for user session on mount
+  useEffect(() => {
+    // Check if user passed via state or stored in session
+    const storedUser = sessionStorage.getItem('user');
+    const stateUser = location.state?.user;
+    
+    if (stateUser) {
+      setUser(stateUser);
+      sessionStorage.setItem('user', JSON.stringify(stateUser));
+    } else if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      // No user session, redirect to login
+      navigate('/login');
+    }
+  }, [location, navigate]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('user');
+    navigate('/login');
+  };
 
   const startAnalysis = async () => {
     if (!file || !role) {
@@ -44,9 +68,32 @@ const SetupScreen = () => {
 
   return (
     <div className="setup-container">
-      <div className="glass-panel" style={{ padding: '40px', width: '400px', display: 'flex', flexDirection: 'column', gap: '20px', margin: '10vh auto' }}>
-        <h2 className="glow-text" style={{ textAlign: 'center', marginBottom: '10px' }}>Kriyeta 5.0</h2>
-        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '-15px', marginBottom: '20px' }}>Setup your Mock Interview</p>
+      {/* User greeting & logout */}
+      {user && (
+        <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <span style={{ color: 'var(--text-secondary)' }}>
+            Welcome, <strong style={{ color: 'var(--primary)' }}>{user.name || user.email}</strong>
+          </span>
+          <button 
+            onClick={handleLogout}
+            style={{
+              padding: '8px 16px',
+              background: 'transparent',
+              border: '1px solid var(--primary)',
+              borderRadius: '6px',
+              color: 'var(--primary)',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      )}
+
+      <div className="glass-panel" style={{ padding: '40px', width: '450px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <h2 className="glow-text" style={{ textAlign: 'center', marginBottom: '5px' }}>Start Mock Interview</h2>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '0px', marginBottom: '20px' }}>Configure your personalized session</p>
 
         <div>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Target Role</label>
@@ -78,10 +125,10 @@ const SetupScreen = () => {
 
         <div>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Upload Resume (PDF)</label>
-          <input type="file" onChange={(e) => setFile(e.target.files[0])} accept=".pdf" className="input-field" style={{ padding: '8px' }} />
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} accept=".pdf" className="input-field file-input" style={{ padding: '10px' }} />
         </div>
 
-        <button onClick={startAnalysis} disabled={loading} className="btn-primary pulse-dot" style={{ marginTop: '10px' }}>
+        <button onClick={startAnalysis} disabled={loading} className="btn-primary pulse-dot" style={{ marginTop: '15px' }}>
           {loading ? "Analyzing ATS Profile..." : "Start Interview"}
         </button>
       </div>
